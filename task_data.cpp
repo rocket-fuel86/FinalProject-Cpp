@@ -167,17 +167,42 @@ void saveTasksBin(const char* filename, Task* arr, int size) {
 
 void loadTasksBin(const char* filename, Task*& arr, int& size) {
     FILE* file = fopen(filename, "rb");
-    if (!file) return;
+    if (!file) {
+        size = 0;
+        arr = nullptr;
+        return;
+    }
 
-    if (fread(&size, sizeof(int), 1, file) != 1) {
+    int expected_size = 0;
+    if (fread(&expected_size, sizeof(int), 1, file) != 1 || expected_size <= 0) {
         fclose(file);
+        size = 0;
+        arr = nullptr;
         return;
     }
 
     delete[] arr;
-    arr = new Task[size];
+    arr = new Task[expected_size];
 
-    fread(arr, sizeof(Task), size, file);
+    int read_elements = fread(arr, sizeof(Task), expected_size, file);
+
+
+    if (read_elements != expected_size) {
+        size = read_elements;
+        if (size == 0) {
+            delete[] arr;
+            arr = nullptr;
+        }
+        else {
+            Task* shrinked = new Task[size];
+            for (int i = 0; i < size; i++) shrinked[i] = arr[i];
+            delete[] arr;
+            arr = shrinked;
+        }
+    }
+    else {
+        size = expected_size;
+    }
 
     fclose(file);
 }
