@@ -1,7 +1,5 @@
 #include "ui_functions.h"
 #include <iostream>
-#include <cstring>
-#include <limits>
 
 void showMenu() {
     std::cout << "\n=== TODO LIST ===\n";
@@ -38,26 +36,26 @@ Date inputDate() {
     std::cout << "Day: ";
     while (!(std::cin >> d.day) || d.day < 1 || d.day > 31) {
         std::cin.clear(); 
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+        std::cin.ignore();
         std::cout << "Invalid input. Enter Day (1-31): ";
     }
 
     std::cout << "Month: ";
     while (!(std::cin >> d.month) || d.month < 1 || d.month > 12) {
         std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cin.ignore();
         std::cout << "Invalid input. Enter Month (1-12): ";
     }
 
     std::cout << "Year: ";
     while (!(std::cin >> d.year) || d.year < 1900 || d.year > 2100) {
         std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cin.ignore();
         std::cout << "Invalid input. Enter a valid Year (e.g., 2026): ";
     }
 
 
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cin.ignore();
     return d;
 }
 
@@ -66,7 +64,7 @@ Task inputTask(int id) {
     int pr;
 
 
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cin.ignore();
 
     std::cout << "Name: ";
     std::cin.getline(title, MAX_STR);
@@ -77,7 +75,7 @@ Task inputTask(int id) {
     std::cout << "Priority (1-High, 2-Medium, 3-Low): ";
     while (!(std::cin >> pr) || pr < 1 || pr > 3) {
         std::cin.clear(); 
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+        std::cin.ignore();
         std::cout << "Invalid choice. Please enter 1, 2, or 3: ";
     }
 
