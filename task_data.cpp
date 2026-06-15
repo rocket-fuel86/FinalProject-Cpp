@@ -1,4 +1,3 @@
-#include <iostream>
 #include <cstring>
 #include <cstdio>
 #include <algorithm>
@@ -12,12 +11,12 @@ void printTask(const Task& t) {
         << " | " << t.description << "\n";
 }
 
-void printAll(Task* tasks, int size) {
+void printAll(Task* tasks, size_t size) {
     if (size == 0) {
         std::cout << "No tasks.\n";
         return;
     }
-    for (int i = 0; i < size; i++)
+    for (size_t i = 0; i < size; i++)
         printTask(tasks[i]);
 }
 
@@ -37,13 +36,13 @@ bool isBefore(const Date& a, const Date& b) {
     return a.day < b.day;
 }
 
-Task createTask(int id,
+Task createTask(size_t id,
                 const char* title,
                 Priority priority,
                 const char* description,
                 Date due_date) {
 
-    Task t;
+    Task t{};
 
     t.id = id;
     t.priority = priority;
@@ -55,10 +54,10 @@ Task createTask(int id,
     return t;
 }
 
-void addTaskToArray(Task task, Task*& task_array, int& size) {
+void addTaskToArray(Task task, Task*& task_array, size_t& size) {
     Task* newArray = new Task[size + 1];
 
-    for (int i = 0; i < size; i++) {
+    for (size_t i = 0; i < size; i++) {
         newArray[i] = task_array[i];
     }
 
@@ -70,7 +69,7 @@ void addTaskToArray(Task task, Task*& task_array, int& size) {
     size++;
 }
 
-void deleteTaskFromArrayById(int taskId, Task*& task_array, int& size) {
+void deleteTaskFromArrayById(size_t taskId, Task*& task_array, size_t& size) {
     if (size == 0) return;
 
     if (size == 1) {
@@ -82,10 +81,10 @@ void deleteTaskFromArrayById(int taskId, Task*& task_array, int& size) {
 
     Task* newArray = new Task[size - 1];
 
-    int j = 0;
+    size_t j = 0;
     bool found = false;
 
-    for (int i = 0; i < size; i++) {
+    for (size_t i = 0; i < size; i++) {
         if (task_array[i].id == taskId && !found) {
             found = true;
             continue;
@@ -103,8 +102,8 @@ void deleteTaskFromArrayById(int taskId, Task*& task_array, int& size) {
     }
 }
 
-void editTaskInArrayById(int taskId, const Task& newTask, Task* task_array, int& size) {
-    for (int i = 0; i < size; i++) {
+void editTaskInArrayById(size_t taskId, const Task& newTask, Task* task_array, size_t& size) {
+    for (size_t i = 0; i < size; i++) {
         if (task_array[i].id == taskId) {
 
             Task temp = newTask;
@@ -116,23 +115,23 @@ void editTaskInArrayById(int taskId, const Task& newTask, Task* task_array, int&
     }
 }
 
-void searchByTitle(const char* pattern, Task* task_array, int size) {
-    for (int i = 0; i < size; i++) {
+void searchByTitle(const char* pattern, Task* task_array, size_t size) {
+    for (size_t i = 0; i < size; i++) {
         if (contains(task_array[i].title, pattern)) {
             printTask(task_array[i]);
         }
     }
 }
 
-void searchByPriority(Priority priority, Task* task_array, int size) {
-    for (int i = 0; i < size; i++) {
+void searchByPriority(Priority priority, Task* task_array, size_t size) {
+    for (size_t i = 0; i < size; i++) {
         if (task_array[i].priority == priority) {
             printTask(task_array[i]);
         }
     }
 }
 
-void searchByDescription(const char* keyword, Task* task_array, int size) {
+void searchByDescription(const char* keyword, Task* task_array, size_t size) {
     for (int i = 0; i < size; i++) {
         if (contains(task_array[i].description, keyword)) {
             printTask(task_array[i]);
@@ -140,17 +139,18 @@ void searchByDescription(const char* keyword, Task* task_array, int size) {
     }
 }
 
-void searchByDateRange(Date from, Date to, Task* task_array, int size) {
-    for (int i = 0; i < size; i++) {
+void searchByDateRange(Date from, Date to, Task* task_array, size_t size) {
+    for (size_t i = 0; i < size; i++) {
         if (!isBefore(task_array[i].due_date, from) && !isAfter(task_array[i].due_date, to)) {
             printTask(task_array[i]);
         }
     }
 }
 
-void sortByPriority(Task* task_array, int size) {
-    for (int i = 0; i < size - 1; i++) {
-        for (int j = 0; j < size - i - 1; j++) {
+void sortByPriority(Task* task_array, size_t size) {
+    if (size == 0) return;
+    for (size_t i = 0; i < size - 1; i++) {
+        for (size_t j = 0; j < size - i - 1; j++) {
             if (task_array[j].priority < task_array[j + 1].priority) {
                 std::swap(task_array[j], task_array[j + 1]);
             }
@@ -158,9 +158,10 @@ void sortByPriority(Task* task_array, int size) {
     }
 }
 
-void sortByDate(Task* task_array, int size) {
-    for (int i = 0; i < size - 1; i++) {
-        for (int j = 0; j < size - i - 1; j++) {
+void sortByDate(Task* task_array, size_t size) {
+    if (size == 0) return;
+    for (size_t i = 0; i < size - 1; i++) {
+        for (size_t j = 0; j < size - i - 1; j++) {
             if (isAfter(task_array[j].due_date, task_array[j + 1].due_date)) {
                 std::swap(task_array[j], task_array[j + 1]);
             }
@@ -168,18 +169,18 @@ void sortByDate(Task* task_array, int size) {
     }
 }
 
-void saveTasksBin(const char* filename, Task* arr, int size) {
+void saveTasksBin(const char* filename, Task* arr, size_t size) {
     FILE* file = fopen(filename, "wb");
     if (!file) return;
 
-    fwrite(&size, sizeof(int), 1, file);
+    fwrite(&size, sizeof(size_t), 1, file);
     fwrite(arr, sizeof(Task), size, file);
 
     fclose(file);
 }
 
 
-void loadTasksBin(const char* filename, Task*& arr, int& size) {
+void loadTasksBin(const char* filename, Task*& arr, size_t& size) {
     FILE* file = fopen(filename, "rb");
     if (!file) {
         size = 0;
@@ -187,8 +188,8 @@ void loadTasksBin(const char* filename, Task*& arr, int& size) {
         return;
     }
 
-    int expected_size = 0;
-    if (fread(&expected_size, sizeof(int), 1, file) != 1 || expected_size <= 0) {
+    size_t expected_size = 0;
+    if (fread(&expected_size, sizeof(size_t), 1, file) != 1 || expected_size <= 0) {
         fclose(file);
         size = 0;
         arr = nullptr;
@@ -198,7 +199,7 @@ void loadTasksBin(const char* filename, Task*& arr, int& size) {
     delete[] arr;
     arr = new Task[expected_size];
 
-    int read_elements = fread(arr, sizeof(Task), expected_size, file);
+    size_t read_elements = fread(arr, sizeof(Task), expected_size, file);
 
 
     if (read_elements != expected_size) {
@@ -209,7 +210,7 @@ void loadTasksBin(const char* filename, Task*& arr, int& size) {
         }
         else {
             Task* shrinked = new Task[size];
-            for (int i = 0; i < size; i++) shrinked[i] = arr[i];
+            for (size_t i = 0; i < size; i++) shrinked[i] = arr[i];
             delete[] arr;
             arr = shrinked;
         }

@@ -1,5 +1,4 @@
 #include "ui_functions.h"
-#include <iostream>
 
 void showMenu() {
     std::cout << "\n=== TODO LIST ===\n";
@@ -13,12 +12,12 @@ void showMenu() {
     std::cout << "8. Search by priority\n";
     std::cout << "9. Search by description\n";
     std::cout << "10. Search by date\n";
-    std::cout << "0. Exit\n";
+    std::cout << "0. Exit\n\n";
     std::cout << "Select: ";
 }
 
 Date inputDate() {
-    Date d;
+    Date d{};
 
     std::cout << "Day: ";
     while (!(std::cin >> d.day) || d.day < 1 || d.day > 31) {
@@ -46,7 +45,7 @@ Date inputDate() {
     return d;
 }
 
-Task inputTask(int id) {
+Task inputTask(size_t id) {
     char title[MAX_STR], desc[MAX_STR];
     int pr;
 

@@ -1,11 +1,10 @@
-#include <iostream>
 #include "task_data.h"
 #include "ui_functions.h"
 
 int main() {
     Task* tasks = nullptr;
-    int size = 0;
-    int nextId = 1;
+    size_t size = 0;
+    size_t nextId = 1;
 
     loadTasksBin("tasks.dat", tasks, size);
     if (size > 0) nextId = tasks[size - 1].id + 1;

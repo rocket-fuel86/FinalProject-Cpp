@@ -4,7 +4,7 @@
 #include "task_data.h"
 
 void showMenu();
-Task inputTask(int id);
+Task inputTask(size_t id);
 Date inputDate();
 
 #endif
