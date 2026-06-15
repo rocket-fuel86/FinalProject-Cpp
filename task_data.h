@@ -23,6 +23,10 @@ struct Task {
     Date due_date;
 };
 
+void printTask(const Task& t);
+
+void printAll(Task* tasks, int size);
+
 Task createTask(
     int id,
     const char* title,
@@ -55,19 +59,19 @@ bool contains(
     const char* pattern
 );
 
-void filterByTitle(
+void searchByTitle(
     const char* pattern,
     Task* task_array,
     int size
 );
 
-void filterByPriority(
+void searchByPriority(
     Priority priority,
     Task* task_array,
     int size
 );
 
-void filterByDescription(
+void searchByDescription(
     const char* keyword,
     Task* task_array,
     int size
@@ -83,7 +87,7 @@ bool isBefore(
     const Date& b
 );
 
-void filterByDateRange(
+void searchByDateRange(
     Date from,
     Date to,
     Task* task_array,

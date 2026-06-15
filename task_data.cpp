@@ -4,6 +4,39 @@
 #include <algorithm>
 #include "task_data.h"
 
+void printTask(const Task& t) {
+    const char* pr = (t.priority == HIGH) ? "High" : (t.priority == MEDIUM) ? "Medium" : "Low";
+    std::cout << "[" << t.id << "] " << t.title
+        << " | " << pr
+        << " | " << t.due_date.day << "." << t.due_date.month << "." << t.due_date.year
+        << " | " << t.description << "\n";
+}
+
+void printAll(Task* tasks, int size) {
+    if (size == 0) {
+        std::cout << "No tasks.\n";
+        return;
+    }
+    for (int i = 0; i < size; i++)
+        printTask(tasks[i]);
+}
+
+bool contains(const char* text, const char* pattern) {
+    return strstr(text, pattern) != nullptr;
+}
+
+bool isAfter(const Date& a, const Date& b) {
+    if (a.year != b.year) return a.year > b.year;
+    if (a.month != b.month) return a.month > b.month;
+    return a.day > b.day;
+}
+
+bool isBefore(const Date& a, const Date& b) {
+    if (a.year != b.year) return a.year < b.year;
+    if (a.month != b.month) return a.month < b.month;
+    return a.day < b.day;
+}
+
 Task createTask(int id,
                 const char* title,
                 Priority priority,
@@ -58,9 +91,7 @@ void deleteTaskFromArrayById(int taskId, Task*& task_array, int& size) {
             continue;
         }
 
-        if (j < size - 1) {
-            newArray[j++] = task_array[i];
-        }
+        newArray[j++] = task_array[i];
     }
 
     if (found) {
@@ -85,59 +116,42 @@ void editTaskInArrayById(int taskId, const Task& newTask, Task* task_array, int&
     }
 }
 
-bool contains(const char* text, const char* pattern) {
-    return strstr(text, pattern) != nullptr;
-}
-
-void filterByTitle(const char* pattern, Task* task_array, int size) {
+void searchByTitle(const char* pattern, Task* task_array, int size) {
     for (int i = 0; i < size; i++) {
         if (contains(task_array[i].title, pattern)) {
-            std::cout << task_array[i].id << " " << task_array[i].title << "\n";
+            printTask(task_array[i]);
         }
     }
 }
 
-void filterByPriority(Priority priority, Task* task_array, int size) {
+void searchByPriority(Priority priority, Task* task_array, int size) {
     for (int i = 0; i < size; i++) {
         if (task_array[i].priority == priority) {
-            std::cout << task_array[i].id << " " << task_array[i].title << "\n";
+            printTask(task_array[i]);
         }
     }
 }
 
-void filterByDescription(const char* keyword, Task* task_array, int size) {
+void searchByDescription(const char* keyword, Task* task_array, int size) {
     for (int i = 0; i < size; i++) {
         if (contains(task_array[i].description, keyword)) {
-            std::cout << task_array[i].id << " " << task_array[i].title << "\n";
+            printTask(task_array[i]);
         }
     }
 }
 
-bool isAfter(const Date& a, const Date& b) {
-    if (a.year != b.year) return a.year > b.year;
-    if (a.month != b.month) return a.month > b.month;
-    return a.day > b.day;
-}
-
-bool isBefore(const Date& a, const Date& b) {
-    if (a.year != b.year) return a.year < b.year;
-    if (a.month != b.month) return a.month < b.month;
-    return a.day < b.day;
-}
-
-void filterByDateRange(Date from, Date to, Task* task_array, int size) {
+void searchByDateRange(Date from, Date to, Task* task_array, int size) {
     for (int i = 0; i < size; i++) {
-        if (!isBefore(task_array[i].due_date, from) &&
-            !isAfter(task_array[i].due_date, to)) {
-                std::cout << task_array[i].id << " " << task_array[i].title << "\n";
-            }
+        if (!isBefore(task_array[i].due_date, from) && !isAfter(task_array[i].due_date, to)) {
+            printTask(task_array[i]);
+        }
     }
 }
 
 void sortByPriority(Task* task_array, int size) {
     for (int i = 0; i < size - 1; i++) {
         for (int j = 0; j < size - i - 1; j++) {
-            if (task_array[j].priority > task_array[j + 1].priority) {
+            if (task_array[j].priority < task_array[j + 1].priority) {
                 std::swap(task_array[j], task_array[j + 1]);
             }
         }

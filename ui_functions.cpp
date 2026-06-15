@@ -7,27 +7,14 @@ void showMenu() {
     std::cout << "2. Edit task\n";
     std::cout << "3. Delete task\n";
     std::cout << "4. Show all tasks\n";
-    std::cout << "5. Show by priority\n";
-    std::cout << "6. Show by date\n";
+    std::cout << "5. Filter by priority\n";
+    std::cout << "6. Filter by date\n";
+    std::cout << "7. Search by title\n";
+    std::cout << "8. Search by priority\n";
+    std::cout << "9. Search by description\n";
+    std::cout << "10. Search by date\n";
     std::cout << "0. Exit\n";
     std::cout << "Select: ";
-}
-
-void printTask(const Task& t) {
-    const char* pr = (t.priority == HIGH) ? "High" : (t.priority == MEDIUM) ? "Medium" : "Low";
-    std::cout << "[" << t.id << "] " << t.title
-        << " | " << pr
-        << " | " << t.due_date.day << "." << t.due_date.month << "." << t.due_date.year
-        << " | " << t.description << "\n";
-}
-
-void printAll(Task* tasks, int size) {
-    if (size == 0) {
-        std::cout << "No tasks.\n";
-        return;
-    }
-    for (int i = 0; i < size; i++)
-        printTask(tasks[i]);
 }
 
 Date inputDate() {
